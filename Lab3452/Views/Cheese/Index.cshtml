@@ -1,0 +1,80 @@
+﻿@model Lab345.ViewModels.PaginatedCheeseList<Cheese>
+
+
+@{ var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : ""; }
+<h1>All Cheeses</h1>
+@if (Model.Count == 0)
+{<p> No Cheese Yet!</p>}
+<div class="row">
+    <div class="col-md-9">
+        <div>
+            <form asp-controller="Cheese" asp-action="Index" method="get">
+                <div class="form-actions no-color">
+                    <p>
+                        Find by name: <input type="text" name="SearchString" value="@ViewData["currentFilter"]" />
+                        <input type="submit" value="Search" class="btn btn-default" /> |
+                        <a asp-action="Index">Back to Full List</a>
+                    </p>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <a asp-action="Index"
+           asp-route-sortOrder="@ViewData["CurrentSort"]"
+           asp-route-page="@(Model.PageIndex - 1)"
+           asp-route-currentFilter="@ViewData["CurrentFilter"]"
+           class="btn btn-default @prevDisabled">
+            Previous
+        </a>
+        <a asp-action="Index"
+           asp-route-sortOrder="@ViewData["CurrentSort"]"
+           asp-route-page="@(Model.PageIndex + 1)"
+           asp-route-currentFilter="@ViewData["CurrentFilter"]"
+           class="btn btn-default @nextDisabled">
+            Next
+        </a>
+    </div>
+</div>
+
+<table class="table">
+    <tr>
+        <td><a asp-controller="Cheese" asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]">Name</a></td>
+        <td>Country</td>
+        <td>Year</td>
+        <td>Image</td>
+        <td>Action</td>
+    </tr>
+    @foreach (var cheeseModel in Model)
+    {
+        <tr>
+            <td>@cheeseModel.Name</td>
+            <td>@cheeseModel.Country</td>
+            @if (cheeseModel.Year == 0)
+            {
+                <td>N/a</td> }
+            else
+            {
+                <td>@cheeseModel.Year</td>}
+            @if (cheeseModel.Photo.Equals("image_tb.png"))
+            {
+                <td><img src="~/images/@cheeseModel.Photo" width=" 100" height="100" /></td>
+            }
+            else
+            {
+                <td><img src="~/images/@cheeseModel.Photo" width="100" height="100" /></td>
+            }
+            <td>
+                <a class="btn btn-sm btn-primary" asp-controller="Cheese" asp-action="Detail" asp-route-id="@cheeseModel.CheeseId">
+                    <span class="glyphicon glyphicon-th-list"></span>
+                    Details
+                </a>
+               
+            </td>
+        </tr>
+    }
+</table>
+
+
+

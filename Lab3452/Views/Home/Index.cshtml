@@ -1,0 +1,27 @@
+﻿
+@model Lab345.ViewModels.CheeseViewModel
+
+  
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Country</th>
+
+        </tr>
+    </thead>
+    <tbody>     
+        
+            @foreach (var item in ViewBag.cheeses)
+            {
+                <tr>
+                <td>@item.CheeseId</td>
+                <td>@item.Name</td>
+                <td>@item.Country</td>
+                </tr>
+            }
+        
+    </tbody>
+</table>  

@@ -1,0 +1,135 @@
+﻿@model Lab345.ViewModels.PaginatedCheeseList<Cheese>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+@{ var prevDisabled = !Model.HasPreviousPage ? "disabled" : ""; var nextDisabled = !Model.HasNextPage ? "disabled" : ""; }
+<h1>All Cheeses</h1>
+<p><a class="btn btn-info" asp-area="Admin" asp-controller="Cheese" asp-action="Add">Add cheese</a></p>
+@if (Model.Count == 0)
+{<p> No Cheese Yet!</p>}
+<div class="row">
+    <div class="col-md-9">
+        <div>
+            <form asp-area="Admin" asp-controller="Cheese" asp-action="Index" method="get">
+                <div class="form-actions no-color">
+                    <p>
+                        Find by name: <input type="text" name="SearchString" value="@ViewData["currentFilter"]" />
+                        <input type="submit" value="Search" clas s="btn btn-default" /> |
+                        <a asp-action="Index">Back to Full List</a>
+                    </p>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <a asp-area="Admin" asp-action="Index"
+           asp-route-sortOrder="@ViewData["CurrentSort"]"
+           asp-route-page="@(Model.PageIndex - 1)"
+           asp-route-currentFilter="@ViewData["CurrentFilter"]"
+           class="btn btn-default @prevDisabled">
+            Previous
+        </a>
+        <a asp-area="Admin" asp-action="Index"
+           asp-route-sortOrder="@ViewData["CurrentSort"]"
+           asp-route-page="@(Model.PageIndex + 1)"
+           asp-route-currentFilter="@ViewData["CurrentFilter"]"
+           class="btn btn-default @nextDisabled">
+            Next
+        </a>
+    </div>
+</div>
+
+<table class="table">
+    <tr>
+        <td><a asp-area="Admin" asp-controller="Cheese" asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]">Name</a></td>
+        <td>Country</td>
+        <td>Year</td>
+        <td>Image</td>
+        <td>Action</td>
+    </tr>
+    @foreach (var cheeseModel in Model)
+    {
+        <tr>
+            <td>@cheeseModel.Name</td>
+            <td>@cheeseModel.Country</td>
+            @if (cheeseModel.Year == 0)
+            {
+                <td>N/a</td> }
+            else
+            {
+                <td>@cheeseModel.Year</td>}
+            @if (cheeseModel.Photo.Equals("image_tb.png"))
+            {
+                <td><img src="~/images/@cheeseModel.Photo" width=" 100" height="100" /></td>
+            }
+            else
+            {
+                <td><img src="~/images/@cheeseModel.Photo" width="100" height="100" /></td>
+            }
+            <td>
+                <a class="btn btn-sm btn-primary"asp-area="Admin" asp-controller="Cheese" asp-action="Detail" asp-route-id="@cheeseModel.CheeseId">
+                    <span class="glyphicon glyphicon-thlist"></span>
+                    Details
+                </a>
+                <a class="btn btn-sm btn-info" asp-area="Admin" asp-controller="Cheese" asp-action="Edit" asp-route-id="@cheeseModel.CheeseId">
+                    <span class="glyphicon glyphiconpencil"></span>
+                    Edit
+                </a>
+                <a data-id="@cheeseModel.CheeseId" data-controller="Cheese" data-action="Delete" data-bodymessage="Delete @cheeseModel.CheeseId?"
+                   class="btn btn-danger btn-sm delete">
+                    <span class="glyphicon-thlist"></span>
+                    Delete
+                </a>
+            </td>
+        </tr>
+    }
+</table>
+
+<div class="modal fade" id="deleteModal" tabindex="1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modaltitle" id="myModalLabel">Warning</h4>
+            </div>
+            <div class="modal-body delete-modal-body">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btndefault" data-dismiss="modal" id="cancel-delete">Cancel</button>
+                <button type="button" class="btn btndanger" id="confirm-delete">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function a () {
+        var url; var redirectUrl; var target;
+        $('.delete').on('click', (e) => {
+            e.preventDefault();
+            target = e.target;
+            var Id = $(target).data('id');
+            var controller = $(target).data('controller');
+            var action = $(target).data('action');
+            var bodyMessage = $(target).data('bodymessage');
+            redirectUrl = $(target).data('redirect-url');
+            url = "/" + controller + "/" + action + "?id=" + Id;
+            $('.delete-modal-body').text(bodyMessage);
+            $('#deleteModal').modal('show');
+        });
+        $('#confirm-delete').on('click', () => {
+            $.get(url).done((result) => {
+                if (!redirectUrl) { return $(target).parent().parent().hide('slow'); }
+                window.location.href = redirectUrl;
+            }).fail((error) =>
+                {
+                if (redirectUrl)
+                    window.location.href = redirectUrl;
+                }).always(() =>
+                {
+                    $("#deleteModal").modal('hide');
+                });
+        });
+        console.log("Ok")
+    });
+
+</script> 

@@ -1,0 +1,87 @@
+﻿@model Lab345.ViewModels.CheeseViewModel
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<h1>Add Cheese</h1>
+<form asp-area="Admin" asp-controller="Cheese" asp-action="Add" method="post" enctype="multipart/form-data" class="form-horizontal" id="cheeseForm">
+    <div class="form-group">
+        <label asp-for="Name" class="col-md-2 control-label"></label>
+        <div class="col-md-6">
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+    </div>     <div class="form-group">
+        <label asp-for="Descriptions" class="col-md-2 controllabel"></label>
+        <div class="col-md-6">
+            <textarea asp-for="Descriptions" rows="10" class="form-control"></textarea>
+            <span asp-validation-for="Descriptions" class="textdanger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="Country" class="col-md-2 control-label"></label>
+        <div class="col-md-6">
+            <input asp-for="Country" class="form-control" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="Photo" class="col-md-2 control-label">Photo</label>
+        <div class="col-md-6">
+            <input asp-for="Photo" class="form-control" type="file" name="photo" id="fileUpload" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="Photo" class="col-md-2 control-label">Preview</label>
+        <div class="col-md-6">
+            <img id="image_upload_preview"
+                 src="/images/image_tb.png" height="100" width="100" alt="your image" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="Type" class="col-md-2 control-label"></label>
+        <div class="col-md-6">
+            <select asp-for="Type" asp-items="Model.CheeseTypes" class="form-control"></select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="Quantity" class="col-md-2 control-label"></label>
+        <div class="col-md-6">
+            <input asp-for="Quantity" class="form-control" />
+            <span asp-validation-for="Quantity" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="Price" class="col-md-2 control-label"></label>
+        <div class="col-md-6">
+            <input asp-for="Price" class="form-control" />
+            <span asp-validation-for="Price" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-6 float-center">
+            <input class="btn btn-primary" type="submit" value="Add Cheese" />
+        </div>
+    </div>
+</form>
+
+<script>
+    $("#fileUpload").on('change', function () {
+        if (typeof (FileReader) != "undefined") {
+            var image_holder = $("#image-holder"); image_holder.empty();
+            var reader = new FileReader(); reader.onload = function (e) {
+                $("<img />", { "src": e.target.result, "class": "thumb-image", "width": "80%" }).appendTo(image_holder);
+            }
+            image_holder.show(); reader.readAsDataURL($(this)[0].files[0]);
+        } else { alert("This browser does not support FileReader."); }
+    });
+
+
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) { $('#image_upload_preview').attr({ 'src': e.target.result, 'width': '200px' }); }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    $("#fileUpload").change(function () { readURL(this); });
+</script>
+
+

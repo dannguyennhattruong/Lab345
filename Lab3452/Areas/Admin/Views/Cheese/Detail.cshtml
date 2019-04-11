@@ -1,0 +1,41 @@
+﻿@model Lab345.Models.Cheese
+<h1>@ViewBag.title</h1>
+<h2>Cheese Details</h2> <p><a asp-area="Admin" class="btn btn-primary" asp-controller="Cheese" asp-action="Index" >Return</a></p>
+<table class="table">
+    <tr>         <th>Name</th>         <td>@Model.Name</td>     </tr>
+    <tr>
+        <th>Descriptions</th>
+        <td>@Model.Descriptions</td>
+    </tr>
+    <tr>         <th>Country</th>         <td>@Model.Country</td>     </tr>
+    <tr>
+        <th>Year</th>
+        @if (Model.Year == 0)
+        {
+            <td>N/a</td> }
+        else
+        {
+            <td>@Model.Year</td>}
+    </tr>
+    <tr>
+        <th>Quantity</th>
+        <td>@Model.Quantity</td>
+    </tr>
+    <tr>
+        <th>Price</th>
+        <td>@Model.Price</td>
+    </tr>
+    <tr>
+        <th>Create On</th>
+        <td>@Model.CreateOn.ToString("dd-MM-yyyy hh:mm:ss")</td>
+    </tr>
+    <tr></tr>
+    <tr>
+        <th>Image</th>
+        <td><img src="~/images/@Model.Photo" alt="@Model.Name" /></td>
+    </tr>
+
+
+
+
+</table> 

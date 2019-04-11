@@ -1,0 +1,63 @@
+﻿@model Lab345.ViewModels.CheeseViewModel
+
+
+<h2>Cheese Edit</h2>
+<form asp-area="Admin" asp-controller="Cheese" asp-action="Edit" method="post" class="form-horizontal">
+    <div class="form-group" hidden>
+        <label asp-for="CheeseId" class="col-md-2 control-label"></label>
+        <div class="col-md-6">
+            <input asp-for="CheeseId" class="form-control" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="Name" class="col-md-2 control-label"></label>
+        <div class="col-md-6">
+            <input asp-for="Name" class="form-control" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="Descriptions" class="col-md-2 control-label"></label>
+        <div class="col-md-6">
+<textarea aspfor="Descriptions" rows="10" class="form-control"></textarea>
+        </div>
+    </div>     <div class="form-group">
+        <label asp-for="Year" class="col-md-2 control-label"></label>        
+    <div class="col-md-2">
+            <select asp-for="Year" class="form-control">
+                <option value="0">N/a</option>
+                @for (int i = 1900; i < DateTime.Now.Year; i++)
+                {
+                    <option value=@i>@i</option>}
+            </select>
+        </div>         <label asp-for="Country" class="col-md-2 control-label"></label>         
+    <div class="col-md-2">
+            <select asp-for="Country" class="form-control">
+                <option value="France">France</option>
+                <option value="US">US</option>
+                <option value="Spain">Spain</option>
+                <option value="--">Other</option>
+            </select>
+        </div>
+    </div>     <div class="form-group">
+        <label asp-for="Price" class="col-md-2 control-label"></label>
+        <div class="col-md-2">             <input asp-for="Price" class="form-control" />         </div>
+        <label asp-for="Quantity" class="col-md-2 control-label"></label>         
+    <div class="col-md-2">
+            <input asp-for="Quantity" class="form-control" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="Type" class="col-md-2 controllabel"></label>
+        <div class="col-md-6">
+            <select asp-for="Type" asp-items="Model.CheeseTypes" class="form-control"></select>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="btn-group col-md-offset-2 col-md-6">
+            <input class="btn btn-default" type="submit" value="Return" asp-controller="Cheese" asp-action="Index" />
+            <input class="btn btn-success" type="submit" value="Update" />
+        </div>
+    </div>
+    @if (ViewBag.status == 1)
+    {<p class="textwarning"> Record saved on @Model.CreateOn.ToString("dd-MMyyy hh:mm:ss")</p>}
+</form>
